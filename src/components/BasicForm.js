@@ -6,7 +6,9 @@ import { DevTool } from '@hookform/devtools';
 export default function BasicForm() {
 
   const form = useForm()
-  const { register, control, handleSubmit } = form;
+  const { register, control, handleSubmit ,formState} = form;
+
+  const {errors}=formState;
 
   const onSubmit = (data) => { console.log("Form Submitted", data) }
 
@@ -20,16 +22,17 @@ export default function BasicForm() {
             <input type='text' id='username' {...register("username", {
               required: {
                 value: true,
-                message: "Please Enter Your Name"
+                message: "Please enter username"
               }
             })} /><br />
           </div>
+          <div><p className="text-danger">{errors.username?.message}</p></div>
           <div>
             <label htmlFor='email'>Email : </label><br />
             <input type='email' id='email' {...register("email", {
               required:{
                 value:true,
-                message:"Please Enter Email"
+                message:"Please enter email"
               },
               pattern: {
                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/,
@@ -38,6 +41,7 @@ export default function BasicForm() {
               
             })} /><br />
           </div>
+          <div><p className="text-danger">{errors.email?.message}</p></div>
           <div>
             <label htmlFor='password'>Password : </label><br />
             <input type='password' id='password' {...register("password",{
@@ -47,14 +51,15 @@ export default function BasicForm() {
               },
               minLength:{
                 value:6,
-                message:"Invalid Minimum Length 6"
+                message:"Invalid minimum length 6"
               },
               maxLength:{
                 value:10,
-                message:"Invalid Maximum Length 10"
+                message:"Invalid maximum length 10"
               }
             })} /><br />
           </div>
+          <div><p className="text-danger">{errors.password?.message}</p></div>
           <button className='btn btn-danger px-5 py-2 mt-3'>Submit</button>
         </form>
       </div>
