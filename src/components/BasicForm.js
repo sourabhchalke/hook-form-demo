@@ -6,14 +6,14 @@ import { DevTool } from '@hookform/devtools';
 export default function BasicForm() {
 
 const form = useForm()
-const {register,control}=form;
+const {register,control,handleSubmit}=form;
 
+const onSubmit=(data)=>{console.log("Form Submitted",data)}
 
   return (
     <div className='row m-0'>
       <div className='col-12 col-md-8 col-lg-4 mx-auto mt-5'>
-        <form>
-         
+        <form onSubmit={handleSubmit(onSubmit)}>
             <h3>SignIn Form</h3>
             <div>
                 <label htmlFor='username'>Username : </label><br/>
