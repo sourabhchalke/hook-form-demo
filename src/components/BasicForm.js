@@ -32,13 +32,20 @@ export default function BasicForm() {
             <input type='email' id='email' {...register("email", {
               required:{
                 value:true,
-                message:"Please enter email"
+                message:"Please enter email",
               },
               pattern: {
                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/,
-                message:"Invalid Email"
+                message:"Invalid Email",
               },
-              
+              validate:{
+                notAdmin:(fieldValue)=>{
+                return (fieldValue !== "Admin@123" || "Enter different email");
+              },
+              notBlackListed:(fieldValue)=>{
+                return (fieldValue !== "Blocked@123" || "This email is blocked enter another email");
+              },
+            }
             })} /><br />
           </div>
           <div><p className="text-danger">{errors.email?.message}</p></div>
