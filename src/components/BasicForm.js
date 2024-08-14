@@ -1,16 +1,28 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { DevTool } from '@hookform/devtools';
+import { DevTool } from '@hookform/devtools'
 
 
 export default function BasicForm() {
 
-  const form = useForm()
+  const form = useForm({
+    defaultValues:{
+      username:"",
+      email:"",
+      password:"",
+      social:{
+        instagram:"",
+        facebook:""
+      },
+      phoneNumber:["",""]
+    }
+  })
   const { register, control, handleSubmit ,formState} = form;
 
   const {errors}=formState;
 
   const onSubmit = (data) => { console.log("Form Submitted", data) }
+
 
   return (
     <div className='row m-0'>
@@ -33,10 +45,6 @@ export default function BasicForm() {
               required:{
                 value:true,
                 message:"Please enter email",
-              },
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/,
-                message:"Invalid Email",
               },
               validate:{
                 notAdmin:(fieldValue)=>{
@@ -67,6 +75,48 @@ export default function BasicForm() {
             })} /><br />
           </div>
           <div><p className="text-danger">{errors.password?.message}</p></div>
+
+          <div>
+            <label htmlFor='instagram'>Instagram : </label><br />
+            <input type='text' id='instagram' {...register("social.instagram", {
+              required: {
+                value: true,
+                message: "Please enter instagram name"
+              }
+            })} /><br />
+          </div>
+          <div><p className="text-danger">{errors.instagram?.message}</p></div>
+          <div>
+            <label htmlFor='facebook'>Facebook : </label><br />
+            <input type='text' id='facebook' {...register("social.facebook", {
+              required: {
+                value: true,
+                message: "Please enter facebook name"
+              }
+            })} /><br />
+          </div>
+          <div><p className="text-danger">{errors.instagram?.message}</p></div>
+
+          <div>
+            <label htmlFor='phoneNumber'>Phone No. 1 : </label><br />
+            <input type='text' id='phoneNumber1' {...register("phoneNumber[0]", {
+              required: {
+                value: true,
+                message: "Please enter facebook name"
+              }
+            })} /><br />
+          </div>
+          <div><p className="text-danger">{errors.phoneNumber?.message}</p></div>
+          <div>
+            <label htmlFor='phoneNumber'>Phone No. 2 </label><br />
+            <input type='text' id='phoneNumber2' {...register("phoneNumber[1]", {
+              required: {
+                value: true,
+                message: "Please enter facebook name"
+              }
+            })} /><br />
+          </div>
+          <div><p className="text-danger">{errors.instagram?.message}</p></div>
           <button className='btn btn-danger px-5 py-2 mt-3'>Submit</button>
         </form>
       </div>
