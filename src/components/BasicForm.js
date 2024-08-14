@@ -1,12 +1,12 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-
+import { DevTool } from '@hookform/devtools';
 
 
 export default function BasicForm() {
 
 const form = useForm()
-const {register}=form;
+const {register,control}=form;
 
 
   return (
@@ -30,7 +30,7 @@ const {register}=form;
             <button className='btn btn-danger px-5 py-2 mt-3'>Submit</button>
         </form>
       </div>
-      
+      <DevTool control={control}/>
     </div>
   )
 }
