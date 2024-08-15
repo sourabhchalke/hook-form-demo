@@ -19,9 +19,9 @@ export default function BasicForm() {
       phoneNumber:["",""]
     }
   })
-  const { register, control, handleSubmit,watch,getValues,setValue ,formState} = form;
+  const { register, control, handleSubmit,watch,getValues,setValue ,formState,reset} = form;
 
-  const {errors,touchedFields,dirtyFields,validatingFields,isDirty,isValid}=formState;
+  const {errors,touchedFields,dirtyFields,validatingFields,isDirty,isValid,isSubmitting,isSubmitted,isSubmitSuccessful}=formState;
 
   console.log(touchedFields,dirtyFields,validatingFields)
 
@@ -35,6 +35,12 @@ export default function BasicForm() {
     });
     return ()=> subscription.unsubscribe();
   },[watch]);
+
+  useEffect(()=>{
+    if(isSubmitSuccessful){
+      reset();
+    } 
+  },[isSubmitSuccessful])
 
   const handleGetValues=()=>{
     console.log("Get Values : ",getValues(["username"]));
@@ -50,6 +56,8 @@ export default function BasicForm() {
   const onError=(errors)=>{
     console.log("Submission Error",errors);
   }
+
+  console.log(isSubmitting,isSubmitted,isSubmitSuccessful)
 
   return (
     <div className='row m-0'>
@@ -158,6 +166,7 @@ export default function BasicForm() {
           <button className='btn btn-danger px-5 py-2 mt-3' disabled={!isDirty || !isValid} >Submit</button>
           <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleGetValues}>Get Values</button>
           <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleSetValues}>Set Values</button>
+          {/* <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={()=>reset()} >Reset</button> */}
         </form>
       </div>
       <DevTool control={control} />
