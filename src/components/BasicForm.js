@@ -21,7 +21,9 @@ export default function BasicForm() {
   })
   const { register, control, handleSubmit,watch,getValues,setValue ,formState} = form;
 
-  const {errors}=formState;
+  const {errors,touchedFields,dirtyFields,validatingFields,isDirty,isValid}=formState;
+
+  console.log(touchedFields,dirtyFields,validatingFields)
 
   const onSubmit = (data) => { console.log("Form Submitted", data) }
 
@@ -44,11 +46,16 @@ export default function BasicForm() {
       shouldTouch:true
     })
   }
+
+  const onError=(errors)=>{
+    console.log("Submission Error",errors);
+  }
+
   return (
     <div className='row m-0'>
       <div className='col-12 col-md-8 col-lg-4 mx-auto mt-5'>
         {/* <p>Watch Values : {JSON.stringify(watchForm)}</p> */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit,onError)}>
           <h3>SignIn Form</h3>
           <div>
             <label htmlFor='username'>Username : </label><br />
@@ -108,6 +115,12 @@ export default function BasicForm() {
             })} /><br />
           </div>
           <div><p className="text-danger">{errors.age?.message}</p></div>
+          <div>
+            <label htmlFor='bod'>BOD : </label><br />
+            <input type='date' id='bod' {...register("bod", {
+              valueAsDate:true,
+            })} /><br />
+          </div>
 
           <div>
             <label htmlFor='instagram'>Instagram : </label><br />
@@ -120,22 +133,14 @@ export default function BasicForm() {
           </div>
           <div><p className="text-danger">{errors.instagram?.message}</p></div>
 
-
-
-          <div>
-            <label htmlFor='bod'>BOD : </label><br />
-            <input type='date' id='bod' {...register("bod", {
-              valueAsDate:true,
-            })} /><br />
-          </div>
-
           <div>
             <label htmlFor='facebook'>Facebook : </label><br />
             <input type='text' id='facebook' {...register("social.facebook", {
-              required: {
-                value: true,
-                message: "Please enter facebook name"
-              }
+              disabled:watch("social.instagram")==="",
+              // required: {
+              //   value: true,
+              //   message: "Please enter facebook name"
+              // }
             })} /><br />
           </div>
           <div><p className="text-danger">{errors.facebook?.message}</p></div>
@@ -150,7 +155,7 @@ export default function BasicForm() {
             <input type='text' id='phoneNumber2' {...register("phoneNumber[1]")} /><br />
           </div>
           <div><p className="text-danger">{errors.instagram?.message}</p></div>
-          <button className='btn btn-danger px-5 py-2 mt-3'>Submit</button>
+          <button className='btn btn-danger px-5 py-2 mt-3' disabled={!isDirty || !isValid} >Submit</button>
           <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleGetValues}>Get Values</button>
           <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleSetValues}>Set Values</button>
         </form>
