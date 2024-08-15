@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
 
@@ -10,6 +10,8 @@ export default function BasicForm() {
       username:"",
       email:"",
       password:"",
+      bod:new Date(),
+      age:0,
       social:{
         instagram:"",
         facebook:""
@@ -17,16 +19,35 @@ export default function BasicForm() {
       phoneNumber:["",""]
     }
   })
-  const { register, control, handleSubmit ,formState} = form;
+  const { register, control, handleSubmit,watch,getValues,setValue ,formState} = form;
 
   const {errors}=formState;
 
   const onSubmit = (data) => { console.log("Form Submitted", data) }
 
+//  const watchForm = watch();
 
+  useEffect(()=>{
+    const subscription = watch((value)=>{
+      console.log(value);
+    });
+    return ()=> subscription.unsubscribe();
+  },[watch]);
+
+  const handleGetValues=()=>{
+    console.log("Get Values : ",getValues(["username"]));
+  }
+  const handleSetValues=()=>{
+    setValue("username","",{
+      shouldValidate:true,
+      shouldDirty:true,
+      shouldTouch:true
+    })
+  }
   return (
     <div className='row m-0'>
       <div className='col-12 col-md-8 col-lg-4 mx-auto mt-5'>
+        {/* <p>Watch Values : {JSON.stringify(watchForm)}</p> */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <h3>SignIn Form</h3>
           <div>
@@ -77,6 +98,18 @@ export default function BasicForm() {
           <div><p className="text-danger">{errors.password?.message}</p></div>
 
           <div>
+            <label htmlFor='age'>Age : </label><br />
+            <input type='text' id='age' {...register("age", {
+              valueAsNumber:true,
+              required: {
+                value: true,
+                message: "Please enter instagram name"
+              }
+            })} /><br />
+          </div>
+          <div><p className="text-danger">{errors.age?.message}</p></div>
+
+          <div>
             <label htmlFor='instagram'>Instagram : </label><br />
             <input type='text' id='instagram' {...register("social.instagram", {
               required: {
@@ -86,6 +119,16 @@ export default function BasicForm() {
             })} /><br />
           </div>
           <div><p className="text-danger">{errors.instagram?.message}</p></div>
+
+
+
+          <div>
+            <label htmlFor='bod'>BOD : </label><br />
+            <input type='date' id='bod' {...register("bod", {
+              valueAsDate:true,
+            })} /><br />
+          </div>
+
           <div>
             <label htmlFor='facebook'>Facebook : </label><br />
             <input type='text' id='facebook' {...register("social.facebook", {
@@ -95,29 +138,21 @@ export default function BasicForm() {
               }
             })} /><br />
           </div>
-          <div><p className="text-danger">{errors.instagram?.message}</p></div>
+          <div><p className="text-danger">{errors.facebook?.message}</p></div>
 
           <div>
             <label htmlFor='phoneNumber'>Phone No. 1 : </label><br />
-            <input type='text' id='phoneNumber1' {...register("phoneNumber[0]", {
-              required: {
-                value: true,
-                message: "Please enter facebook name"
-              }
-            })} /><br />
+            <input type='text' id='phoneNumber1' {...register("phoneNumber[0]")} /><br />
           </div>
           <div><p className="text-danger">{errors.phoneNumber?.message}</p></div>
           <div>
             <label htmlFor='phoneNumber'>Phone No. 2 </label><br />
-            <input type='text' id='phoneNumber2' {...register("phoneNumber[1]", {
-              required: {
-                value: true,
-                message: "Please enter facebook name"
-              }
-            })} /><br />
+            <input type='text' id='phoneNumber2' {...register("phoneNumber[1]")} /><br />
           </div>
           <div><p className="text-danger">{errors.instagram?.message}</p></div>
           <button className='btn btn-danger px-5 py-2 mt-3'>Submit</button>
+          <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleGetValues}>Get Values</button>
+          <button className='btn btn-danger px-5 py-2 mt-3' type='button' onClick={handleSetValues}>Set Values</button>
         </form>
       </div>
       <DevTool control={control} />
